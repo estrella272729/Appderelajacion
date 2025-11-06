@@ -1,122 +1,125 @@
 import streamlit as st
 from streamlit_player import st_player
 
-st.set_page_config(page_title="Espacio Zen", page_icon="🌿", layout="wide")
+st.set_page_config(page_title="Espacio Zen Multimodal", page_icon="🌿", layout="wide")
 
-# -------- BACKGROUND DYNAMIC STYLE --------
-def set_bg(image_url):
+# --------- FONDOS PERSONALIZADOS ---------
+def set_bg(url):
     st.markdown(f"""
     <style>
     .stApp {{
-        background-image: url("{image_url}");
+        background-image: url("{url}");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
+        color: #ffffff;
     }}
-    .title-box {{
-        background: rgba(255,255,255,0.55);
-        padding: 25px;
-        border-radius: 18px;
-        backdrop-filter: blur(4px);
-        text-align:center;
-        animation: fadein 1s ease;
+    h1, h2, h3, label {{ color: #ffffff; text-shadow: 0 0 10px #00000055; }}
+    .glass {{
+        background: rgba(255,255,255,0.18);
+        padding: 28px;
+        border-radius: 22px;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.30);
+        margin-top: 20px;
+        animation: fadein 0.8s ease;
     }}
     @keyframes fadein {{
       from {{ opacity: 0; transform: translateY(10px); }}
       to {{ opacity: 1; transform: translateY(0); }}
     }}
-    .control-box {{
-        background: rgba(255,255,255,0.45);
-        padding: 20px;
-        border-radius: 16px;
-        backdrop-filter: blur(5px);
-        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        animation: fadein 1s ease;
-        margin-top: 15px;
-    }}
     .stButton>button {{
-        background: #ffffffcc;
-        border: none;
-        padding: 14px 26px;
-        border-radius: 14px;
+        background: rgba(255,255,255,0.35) !important;
+        backdrop-filter: blur(6px);
+        border: none !important;
         font-size: 18px;
+        border-radius: 18px;
+        padding: 14px 30px;
+        color: white !important;
         transition: 0.3s;
     }}
     .stButton>button:hover {{
-        transform: scale(1.07);
-        background: #ffffff;
+        background: rgba(255,255,255,0.7) !important;
+        color: #1b1b1b !important;
+        transform: scale(1.05);
     }}
     </style>
     """, unsafe_allow_html=True)
 
-# -------- AMBIENTES --------
+
+# --------- AMBIENTES ---------
 ambientes = {
     "🌴 Selva (Fijo)": {
-        "bg":"https://images.unsplash.com/photo-1501785888041-af3ef285b470",
-        "musica":"https://www.youtube.com/watch?v=OdIJ2x3nxzQ",
-        "luz":"Verde selva",
-        "temperatura":"Fresca y húmeda",
-        "humidificador":"Alto",
+        "bg": "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+        "musica": "https://www.youtube.com/watch?v=OdIJ2x3nxzQ",
+        "info": "Luz verde, humedad alta, sonido fauna natural",
         "editable": False
     },
     "🏜️ Desierto (Fijo)": {
-        "bg":"https://images.unsplash.com/photo-1508264165352-258a6f039317",
-        "musica":"https://www.youtube.com/watch?v=2OEL4P1Rz04",
-        "luz":"Ámbar dorado",
-        "temperatura":"Cálida suave",
-        "humidificador":"Bajo",
+        "bg": "https://images.unsplash.com/photo-1508264165352-258a6f039317",
+        "musica": "https://www.youtube.com/watch?v=2OEL4P1Rz04",
+        "info": "Luz ámbar cálida, calor suave, viento desértico",
         "editable": False
     },
-    "🕯️ Zen Minimal (Personalizable)": {
-        "bg":"https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-        "musica":"https://www.youtube.com/watch?v=lFcSrYw-ARY",
-        "luz":"Blanco tenue",
-        "temperatura":"Neutral",
-        "humidificador":"Medio",
+    "🕯️ Zen (Personalizable)": {
+        "bg": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+        "musica": "https://www.youtube.com/watch?v=lFcSrYw-ARY",
+        "info": "Ambiente minimal relajante para personalizar",
         "editable": True
     }
 }
 
-# -------- INTERFAZ PRINCIPAL --------
-st.markdown("<div class='title-box'><h1>🌿 ESPACIO DE RELAJACIÓN</h1><p>Elige tu ambiente y respira...</p></div>", unsafe_allow_html=True)
+# --------- UI PRINCIPAL ---------
+st.markdown("<h1 style='text-align: center;'>🌿 ESPACIO DE RELAJACIÓN</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; font-size:18px;'>Elige un ambiente para comenzar...</p>", unsafe_allow_html=True)
 
-ambiente = st.selectbox("Selecciona un ambiente:", list(ambientes.keys()))
-
+ambiente = st.selectbox("", list(ambientes.keys()))
 data = ambientes[ambiente]
 set_bg(data["bg"])
 
-# -------- MOSTRAR DATOS --------
 st.markdown(f"""
-<div class="control-box">
+<div class="glass">
 <h2>{ambiente}</h2>
-<p><b>Luz:</b> {data['luz']}</p>
-<p><b>Temperatura:</b> {data['temperatura']}</p>
-<p><b>Humidificador:</b> {data['humidificador']}</p>
+<p>{data['info']}</p>
 </div>
 """, unsafe_allow_html=True)
 
-# -------- MUSIC PLAYER --------
+# --- MUSIC PLAYER ---
 st.subheader("🎧 Paisaje Sonoro")
 st_player(data["musica"])
 
-# -------- SOLO SE DESBLOQUEA EN AMBIENTE 3 --------
+
+# ------- SOLO PERSONALIZACIÓN EN AMBIENTE 3 -------
 if data["editable"]:
     st.markdown("<h2>🎨 Personalizar Ambiente Zen</h2>", unsafe_allow_html=True)
 
-    luz = st.color_picker("Color de la luz", "#e8e6d8")
-    temp = st.slider("Temperatura (°C)", 15, 35, 22)
-    hum = st.selectbox("Nivel de humidificador:", ["Apagado", "Bajo", "Medio", "Alto"])
+    luz = st.color_picker("Color de la luz", "#f7f5e7")
+    temp = st.slider("Temperatura (°C)", 18, 35, 23)
+    hum = st.selectbox("Nivel de humidificador", ["Apagado", "Bajo", "Medio", "Alto"])
+
+    st.markdown("### 🎼 Elige tu música")
+    musica_op = st.radio("Tipo de música:", ["YouTube", "Archivo (MP3/WAV)"])
+
+    if musica_op == "YouTube":
+        nueva_musica = st.text_input("Pega enlace de YouTube:")
+        if nueva_musica:
+            st_player(nueva_musica)
+
+    else:
+        archivo = st.file_uploader("Sube tu audio", type=["mp3", "wav"])
+        if archivo:
+            st.audio(archivo)
 
     st.markdown(f"""
-    <div class="control-box">
-    <h3>Estado Actual Personalizado</h3>
+    <div class="glass">
+    <h3>🧘 Estado Actual</h3>
     <p><b>Luz:</b> {luz}</p>
-    <p><b>Temperatura:</b> {temp}°C</p>
+    <p><b>Temperatura:</b> {temp} °C</p>
     <p><b>Humidificador:</b> {hum}</p>
-    <p style="opacity:0.6;">Listo para sincronizar con la maqueta / Arduino.</p>
+    <p style="opacity:0.7;">Listo para conexión con Arduino / maqueta.</p>
     </div>
     """, unsafe_allow_html=True)
 
 else:
-    st.markdown("<p style='opacity:0.7;'>🔒 Este ambiente está preconfigurado para mantener la experiencia sensorial original.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='opacity:0.8;'>🔒 Este ambiente está bloqueado para preservar su atmósfera original.</p>", unsafe_allow_html=True)
 
